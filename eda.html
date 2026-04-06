@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EDA - CineVerse AI</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+}
+
+.nav {
+    padding: 15px;
+}
+
+.nav a {
+    color: white;
+    margin: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    color: #ff4b2b;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.container {
+    text-align: center;
+}
+
+img {
+    width: 400px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+button {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+}
+
+button {
+    margin-top: 20px;
+}
+
+button:hover {
+    box-shadow: 0 0 15px #ff416c;
+}
+
+</style>
+</head>
+
+<body>
+
+<script>
+if(localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+}
+</script>
+
+<div class="nav">
+    <a href="index.html">Home</a>
+    <a href="recommend.html">Recommend</a>
+    <a href="sentiment.html">Sentiment</a>
+    <a href="eda.html">EDA</a>
+</div>
+
+<div class="container">
+    <h1>📊 Data Insights</h1>
+
+    <button onclick="loadCharts()">📊 Show Insights</button><br>
+
+    <img id="img1">
+    <img id="img2">
+    <img id="img3">
+</div>
+
+<script>
+async function loadCharts() {
+    document.getElementById("img1").src = "http://127.0.0.1:5000/top_movies";
+    document.getElementById("img2").src = "http://127.0.0.1:5000/rating_dist";
+    document.getElementById("img3").src = "http://127.0.0.1:5000/language";
+}
+</script>
+
+</body>
+</html>

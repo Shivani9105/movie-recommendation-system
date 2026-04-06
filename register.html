@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - CineVerse AI</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        .box {
+            margin-top: 100px;
+            padding: 30px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #ff4b2b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+*       {
+        box-sizing: border-box;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>🎬 Register</h2>
+
+    <input type="text" id="username" placeholder="Username"
+style="width:100%; padding:10px; border-radius:5px; border:none;"><br>
+   <div style="position: relative; width: 100%; margin-top: 15px;">
+
+    <input type="password" id="password" placeholder="Password"
+    style="width:100%; padding:10px 40px 10px 10px; border-radius:5px; border:none;">
+
+    <span onclick="togglePassword()" 
+    style="
+        position:absolute;
+        right:12px;
+        top:50%;
+        transform:translateY(-50%);
+        cursor:pointer;
+        font-size:18px;
+    ">
+        👁️
+    </span>
+
+</div>
+
+
+    <button onclick="register()">Register</button>
+
+    <p id="msg"></p>
+
+    <p>Already have account? <a href="login.html" style="color:yellow;">Login</a></p>
+</div>
+
+<script>
+function register() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if(user === "" || pass === "") {
+        document.getElementById("msg").innerText = "Fill all fields!";
+        return;
+    }
+
+    // Save user
+    localStorage.setItem(user, pass);
+
+    document.getElementById("msg").innerText = "Registered Successfully!";
+}
+
+function togglePassword() {
+    let passField = document.getElementById("password");
+    let icon = event.target;
+
+    if(passField.type === "password") {
+        passField.type = "text";
+        icon.innerText = "🙈";
+    } else {
+        passField.type = "password";
+        icon.innerText = "👁️";
+    }
+}
+
+</script>
+
+</body>
+</html>

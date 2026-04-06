@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sentiment - CineVerse AI</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        .nav {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .nav a {
+            color: white;
+            margin: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav a:hover {
+            color: #ff4b2b;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        textarea {
+            width: 300px;
+            height: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #ff4b2b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff1c00;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 🔐 Login Protection -->
+<script>
+if(localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+}
+</script>
+
+<!-- 🔝 Navbar -->
+<div class="nav">
+    <a href="index.html">Home</a>
+    <a href="recommend.html">Recommend</a>
+    <a href="sentiment.html">Sentiment</a>
+    <a href="eda.html">EDA</a>
+</div>
+
+<!-- 🎯 Main Content -->
+<div class="container">
+    <h1>💬 Sentiment Analysis</h1>
+    <p>Analyze your movie reviews instantly</p>
+
+    <textarea id="review" placeholder="Enter your review..."></textarea><br>
+
+    <button onclick="analyze()">Analyze</button>
+
+    <div id="result"></div>
+</div>
+
+
+<script>
+
+
+async function analyze() {
+    let review = document.getElementById("review").value;
+
+    let response = await fetch("http://127.0.0.1:5000/sentiment", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text: review})
+    });
+
+    let data = await response.json();
+
+    let sentiment = data.sentiment.toLowerCase();
+
+    let resultDiv = document.getElementById("result");
+
+    if (sentiment === "positive") {
+        resultDiv.innerHTML = "😊 Positive";
+        resultDiv.style.color = "lightgreen";
+        }
+        else if (sentiment === "negative") {
+        resultDiv.innerHTML = "😒 Negative";
+        resultDiv.style.color = "red";
+        }
+    else {
+        resultDiv.innerHTML = "😐 Neutral";
+        resultDiv.style.color = "yellow";
+    }
+}
+
+</script>
+
+</body>
+</html>

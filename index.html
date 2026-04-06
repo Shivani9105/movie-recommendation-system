@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - CineVerse AI</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        .nav {
+           padding: 15px;
+           text-align: center;
+        }
+
+        .nav a {
+           color: white;
+           margin: 15px;
+           text-decoration: none;
+           font-weight: bold;
+        }
+        
+        .nav a:hover {
+            color: #ff4b2b;
+        }
+        
+        .container {
+            margin-top: 100px;
+        }
+
+        .btn {
+            display: block;
+            margin: 20px auto;
+            padding: 15px;
+            width: 250px;
+            background: #ff4b2b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+  <div style="position:absolute; top:15px; right:20px;">
+    <button onclick="logout()" 
+    style="padding:8px 15px; background:red; color:white; border:none; border-radius:5px;">
+        Logout
+    </button>
+  </div>
+
+  <script>
+    if(localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+    }
+  </script>
+
+    <div class="nav">
+      <a href="index.html">Home</a>
+      <a href="recommend.html">Recommend</a>
+      <a href="sentiment.html">Sentiment</a>
+      <a href="eda.html">EDA</a>
+    </div>
+
+    <div class="container">
+      <h1>🎬 CineVerse AI</h1>
+      <h3>Welcome to your Movie Intelligence Platform</h3>
+
+      <a href="recommend.html" class="btn">🎥 Movie Recommendation</a>
+      <a href="sentiment.html" class="btn">💬 Sentiment Analysis</a>
+      <a href="eda.html" class="btn">📊 Data Insights</a>
+    </div>
+
+    <script>
+      function logout() {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "login.html";
+      }
+    </script>
+
+</body>
+</html>
