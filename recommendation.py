@@ -1,45 +1,69 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import difflib
 
-# Load dataset
 df = pd.read_csv("data/movies.csv")
 
-# Avoid errors
+
 df.columns = df.columns.str.lower()
 
-# Fill missing values
 df["overview"] = df["overview"].fillna("")
 df["genre"] = df["genre"].fillna("")
 
-# Combine features
-df["combined"] = df["overview"] + " " + df["genre"]
 
-# Convert text → numbers
+df["combined"] = df["overview"] + " " + df["genre"]*2
+
+
 tfidf = TfidfVectorizer(stop_words="english")
 tfidf_matrix = tfidf.fit_transform(df["combined"])
 
 # Similarity matrix
 similarity = cosine_similarity(tfidf_matrix)
 
-# Recommendation function
-def recommend(movie_name):
-    movie_name = movie_name.lower()
+# Fuzzy Matching Function
 
-    # Make title case-insensitive
+def find_closest_movie(name):
+    name = name.lower()
+
     df["title_lower"] = df["title"].str.lower()
 
-    if movie_name not in df["title_lower"].values:
+    match = difflib.get_close_matches(name, df["title_lower"], n=1)
+
+    if match:
+        # Return original title
+        return df[df["title_lower"] == match[0]]["title"].values[0]
+
+    return None
+
+
+
+# Recommendation Function
+
+def recommend(movie_name):
+    # Step 1: Find closest movie
+    movie_name = find_closest_movie(movie_name)
+
+    if not movie_name:
         return ["Movie not found"]
 
-    idx = df[df["title_lower"] == movie_name].index[0]
+    # Step 2: Case handling
+    df["title_lower"] = df["title"].str.lower()
+    movie_name_lower = movie_name.lower()
 
+    if movie_name_lower not in df["title_lower"].values:
+        return ["Movie not found"]
+
+   
+    idx = df[df["title_lower"] == movie_name_lower].index[0]
+
+    
     scores = list(enumerate(similarity[idx]))
     scores = sorted(scores, key=lambda x: x[1], reverse=True)
 
+    
     recommendations = []
-
-    for i in scores[1:10]:  # top 9 movies
+    for i in scores[1:10]:
         recommendations.append(df.iloc[i[0]]["title"])
 
     return recommendations

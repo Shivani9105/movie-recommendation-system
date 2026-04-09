@@ -113,6 +113,7 @@
     <a href="recommend.html">Recommend</a>
     <a href="sentiment.html">Sentiment</a>
     <a href="eda.html">EDA</a>
+    <a href="predict.html">Predict</a>
 </div>
 
 <div class="container">
@@ -148,32 +149,43 @@ async function recommend() {
 
     document.getElementById("result").innerHTML = "";
 
+    let apiKey = "317ac107";
+
     for (let m of data) {
-        let apiKey = "317ac107";  
 
-        for (let m of data) {
+        let res = await fetch(`https://www.omdbapi.com/?t=${m}&apikey=${apiKey}`);
+        let movieData = await res.json();
 
-            let res = await fetch(`https://www.omdbapi.com/?t=${m}&apikey=${apiKey}`);
-            let movieData = await res.json();
+        let poster = movieData.Poster !== "N/A" ? movieData.Poster : "https://via.placeholder.com/150";
 
-            let poster = movieData.Poster !== "N/A" ? movieData.Poster : "https://via.placeholder.com/150";
+        let rating = movieData.imdbRating !== "N/A" ? movieData.imdbRating : "No rating";
+        let year = movieData.Year !== "N/A" ? movieData.Year : "Unknown";
+        let genre = movieData.Genre !== "N/A" ? movieData.Genre : "Not available";
 
-            let rating = movieData.imdbRating !== "N/A" ? movieData.imdbRating : "No rating";
-            let year = movieData.Year !== "N/A" ? movieData.Year : "Unknown";
-            let genre = movieData.Genre !== "N/A" ? movieData.Genre : "Not available";
-
-            document.getElementById("result").innerHTML += `
-            <div class="movie-card">
-               <img src="${poster}" alt="poster">
-               <h4>${m}</h4>
-               <p>⭐ ${rating}</p>
-               <p>📅 ${year}</p>
-               <p>🎭 ${genre}</p>
-            </div>
-            `;
-        }
+        document.getElementById("result").innerHTML += `
+        <div class="movie-card">
+           <img src="${poster}" alt="poster">
+           <h4>${m}</h4>
+           <p>⭐ ${rating}</p>
+           <p>📅 ${year}</p>
+           <p>🎭 ${genre}</p>
+        </div>
+        `;
     }
 }
+
+window.onload = function() {
+    let movie = localStorage.getItem("selectedMovie");
+
+    if (movie) {
+        document.getElementById("movie").value = movie;
+
+        recommend(); 
+
+        localStorage.removeItem("selectedMovie");
+    }
+}
+
 </script>
 
 </body>

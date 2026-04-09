@@ -42,6 +42,22 @@
             border-radius: 5px;
             text-decoration: none;
         }
+
+        .moviePoster {
+            width: 150px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .moviePoster:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 5px 20px rgba(255,255,255,0.3);
+        }
+
+        body {
+          background: linear-gradient(to right, #141e30, #243b55);
+        }
+
     </style>
 </head>
 
@@ -65,15 +81,15 @@
       <a href="recommend.html">Recommend</a>
       <a href="sentiment.html">Sentiment</a>
       <a href="eda.html">EDA</a>
+      <a href="predict.html">Predict</a>
     </div>
 
     <div class="container">
       <h1>🎬 CineVerse AI</h1>
       <h3>Welcome to your Movie Intelligence Platform</h3>
-
-      <a href="recommend.html" class="btn">🎥 Movie Recommendation</a>
-      <a href="sentiment.html" class="btn">💬 Sentiment Analysis</a>
-      <a href="eda.html" class="btn">📊 Data Insights</a>
+    </div>
+    
+    <div id="movieGrid" style="display:flex; flex-wrap:wrap; justify-content:center;">
     </div>
 
     <script>
@@ -81,6 +97,32 @@
       localStorage.removeItem("loggedIn");
       window.location.href = "login.html";
       }
+
+      async function loadMovies() {
+        let movies = ["Avatar", "Titanic", "Inception", "Interstellar", "3 Idiots", "Dangal"];
+        let container = document.getElementById("movieGrid");
+        for (let movie of movies) {
+        let res = await fetch(`https://www.omdbapi.com/?t=${movie}&apikey=317ac107`);
+        let data = await res.json();
+
+        let poster = data.Poster !== "N/A" ? data.Poster : "https://via.placeholder.com/150";
+
+        container.innerHTML += `
+            <div onclick="goToRecommend('${movie}')" 
+              style="margin:15px; cursor:pointer;">
+              <img src="${poster}" class="moviePoster">
+              <p style="color:white; font-weight:bold;">${movie}</p>
+            </div>
+        `;
+        }
+      }
+
+      function goToRecommend(movie) {
+        localStorage.setItem("selectedMovie", movie);
+        window.location.href = "recommend.html";
+      }
+      loadMovies();
+      
     </script>
 
 </body>

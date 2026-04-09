@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Prediction</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            font-family: Arial;
+            text-align: center;
+            color: white;
+        }
+        
+        .nav {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .nav a {
+            color: white;
+            margin: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav a:hover {
+            color: #ff4b2b;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+            border: none;
+            width: 200px;
+        }
+
+        button {
+            background: #ff416c;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff4b2b;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="recommend.html">Recommend</a>
+        <a href="sentiment.html">Sentiment</a>
+        <a href="eda.html">EDA</a>
+        <a href="predict.html">Predict</a>
+    </div>
+   
+
+    <div class="container">
+        <h1>🎬 Movie Success Prediction</h1>
+
+        <input type="number" id="rating" placeholder="⭐ Rating (1-10)">
+        <input type="text" id="genre" placeholder="🎭 Genre (e.g., Action)">
+        <input type="number" id="year" placeholder="📅 Year">
+
+        <br>
+
+        <button onclick="predictMovie()">Predict</button>
+
+        <h2 id="result"></h2>
+    </div>
+
+    <script>
+        async function predictMovie() {
+            let rating = document.getElementById("rating").value;
+            let genre = document.getElementById("genre").value;
+            let year = document.getElementById("year").value;
+
+            let response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    rating: Number(rating),
+                    genre: genre,
+                    year: Number(year)
+                })
+            });
+
+            let data = await response.json();
+
+            document.getElementById("result").innerHTML =
+            "🎯 Prediction: <span style='color:#ff416c'>" + data.prediction + "</span>";
+        }
+    </script>
+
+</body>
+</html>

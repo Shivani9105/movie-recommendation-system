@@ -3,11 +3,12 @@ from flask_cors import CORS
 from recommendation import recommend
 from sentiment import predict_sentiment
 from flask import send_file
+from predict import predict_movie
 
 app = Flask(__name__)
 CORS(app)
 
-# Home route (just to check backend)
+# Home route
 @app.route('/')
 def home():
     return "CineVerse AI Backend Running!"
@@ -53,7 +54,20 @@ def get_sentiment():
     result = predict_sentiment(review)
     return jsonify({"sentiment": result})   
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json
+
+    rating = data.get('rating')
+    genre = data.get('genre')
+    year = data.get('year')
+
+    result = predict_movie(rating, genre, year)
+
+    return jsonify({"prediction": result})
+
 # Run server
 if __name__ == '__main__':
     app.run(debug=True)
+ 
     
